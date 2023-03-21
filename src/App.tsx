@@ -1,8 +1,12 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useQuery } from "@apollo/client";
+import logo from "./logo.svg";
+import "./App.css";
+import { LikesQuery, LikesDocument } from "./graphql/generated";
 
 function App() {
+  const { data, loading, error } = useQuery<LikesQuery>(LikesDocument);
+
+  console.log("data: ", data);
   return (
     <div className="App">
       <header className="App-header">

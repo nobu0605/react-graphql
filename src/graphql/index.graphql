@@ -1,0 +1,14 @@
+query users($first: Int, $page: Int) {
+  users(first: $first, page: $page) {
+    data {
+      id
+    }
+  }
+}
+
+query likes {
+  likes {
+    id
+    is_like
+  }
+}
