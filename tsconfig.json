@@ -20,7 +20,8 @@
       "@components/*": ["src/components/*"],
       "@graphql/*": ["src/graphql/*"],
       "@utils/*": ["src/utils/*"],
-      "@types/*": ["src/types/*"]
+      "@types/*": ["src/types/*"],
+      "@db/*": ["src/db/*"]
     }
   },
   "include": ["src"]
