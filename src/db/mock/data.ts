@@ -1,9 +1,5 @@
 export const data = [
   {
-    name: 'Richard Hendricks',
-    url: process.env.REACT_APP_FRONT_URL + '/img/cards/richard.jpg',
-  },
-  {
     name: 'Erlich Bachman',
     url: process.env.REACT_APP_FRONT_URL + '/img/cards/erlich.jpg',
   },
@@ -18,5 +14,9 @@ export const data = [
   {
     name: 'Dinesh Chugtai',
     url: process.env.REACT_APP_FRONT_URL + '/img/cards/dinesh.jpg',
+  },
+  {
+    name: 'Richard Hendricks',
+    url: process.env.REACT_APP_FRONT_URL + '/img/cards/richard.jpg',
   },
 ]

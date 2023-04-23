@@ -5,10 +5,3 @@ query users($first: Int, $page: Int) {
     }
   }
 }
-
-query likes {
-  likes {
-    id
-    is_like
-  }
-}

@@ -1,0 +1,6 @@
+query likes {
+  likes {
+    id
+    is_like
+  }
+}
