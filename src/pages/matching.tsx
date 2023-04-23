@@ -20,7 +20,6 @@ function Matching() {
     return <></>
   }
 
-  console.log('data: ', data)
   return (
     <>
       <MatchingResult users={data.users} />
