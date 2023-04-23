@@ -1,7 +1,9 @@
+import { useMutation } from '@apollo/client'
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt'
 import ThumbUpIcon from '@mui/icons-material/ThumbUp'
 import { Button, CardMedia, CardContent, Card, Box } from '@mui/material'
 import Typography from '@mui/material/Typography'
+import gql from 'graphql-tag'
 import React, { useState, useMemo, useRef, RefObject } from 'react'
 import TinderCard from 'react-tinder-card'
 import styled from 'styled-components'
@@ -11,14 +13,19 @@ type Props = {
   users: User[]
 }
 
+const likeDocument = gql`
+  mutation like($from: Int!, $to: Int!, $isLike: Boolean!) {
+    like(from: $from, to: $to, isLike: $isLike)
+  }
+`
+
 function MatchingResultComponents({ users }: Props) {
+  const [like, { loading, error }] = useMutation(likeDocument)
   const usersLength = users.length
   const [currentIndex, setCurrentIndex] = useState(usersLength ? usersLength - 1 : 9)
   const [lastDirection, setLastDirection] = useState('')
   // used for outOfFrame closure
   const currentIndexRef = useRef(currentIndex)
-
-  console.log('currentIndexRef: ', currentIndexRef)
 
   const childRefs: RefObject<any>[] = useMemo(
     () =>
@@ -52,9 +59,11 @@ function MatchingResultComponents({ users }: Props) {
     // during latest swipes. Only the last outOfFrame event should be considered valid
   }
 
-  const swipe = async (dir: string) => {
+  const swipe = async (dir: string, id: number) => {
+    const isLike = dir === 'right'
     if (canSwipe && currentIndex < usersLength) {
       await childRefs[currentIndex].current.swipe(dir) // Swipe the card!
+      await like({ variables: { from: 1, to: id, isLike } })
     }
   }
 
@@ -72,23 +81,23 @@ function MatchingResultComponents({ users }: Props) {
       <link href='https://fonts.googleapis.com/css?family=Alatsi&display=swap' rel='stylesheet' />
       <StyledTitle>Maching app</StyledTitle>
       <StyledCardContainer>
-        {users.map((character: User, index: number) => (
+        {users.map((user: User, index: number) => (
           <TinderCard
             ref={childRefs[index]}
             className='swipe'
-            key={character.name}
-            onSwipe={(dir) => swiped(dir, character?.name, index)}
-            onCardLeftScreen={() => outOfFrame(character.name, index)}
+            key={user.name}
+            onSwipe={(dir) => swiped(dir, user?.name, index)}
+            onCardLeftScreen={() => outOfFrame(user.name, index)}
           >
             <Card>
               <CardMedia
                 component='img'
                 height='300'
-                image={process.env.REACT_APP_FRONT_URL + character.profile_img_path}
+                image={process.env.REACT_APP_FRONT_URL + user.profile_img_path}
               />
               <CardContent>
                 <Typography gutterBottom variant='h5'>
-                  {character.name}
+                  {user.name}
                 </Typography>
               </CardContent>
             </Card>
@@ -96,13 +105,13 @@ function MatchingResultComponents({ users }: Props) {
         ))}
       </StyledCardContainer>
       <StyledButtonWrapper>
-        <StyledButton onClick={() => swipe('left')} variant='contained'>
+        <StyledButton onClick={() => swipe('left', users[currentIndex].id)} variant='contained'>
           <ThumbDownAltIcon />
         </StyledButton>
         <StyledButton onClick={() => goBack()} variant='contained'>
           Undo
         </StyledButton>
-        <StyledButton onClick={() => swipe('right')} variant='contained'>
+        <StyledButton onClick={() => swipe('right', users[currentIndex].id)} variant='contained'>
           <ThumbUpIcon />
         </StyledButton>
       </StyledButtonWrapper>

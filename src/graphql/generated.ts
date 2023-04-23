@@ -16,11 +16,23 @@ export type Scalars = {
 
 export type Like = {
   __typename?: 'Like';
-  from?: Maybe<Scalars['ID']>;
-  id?: Maybe<Scalars['ID']>;
+  from: Scalars['Int'];
+  id: Scalars['Int'];
   is_like?: Maybe<Scalars['Boolean']>;
   is_super?: Maybe<Scalars['Boolean']>;
-  to?: Maybe<Scalars['ID']>;
+  to: Scalars['Int'];
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  like?: Maybe<Scalars['Boolean']>;
+};
+
+
+export type MutationLikeArgs = {
+  from: Scalars['Int'];
+  isLike: Scalars['Boolean'];
+  to: Scalars['Int'];
 };
 
 /** Allows ordering a list of records. */
@@ -98,23 +110,29 @@ export type Query = {
   __typename?: 'Query';
   getUserById: User;
   likes: Array<Like>;
+  unlikedUsers: Array<User>;
   /** Find a single user by an identifying attribute. */
   user?: Maybe<User>;
-  /** List multiple users. */
   users: Array<User>;
 };
 
 
 /** Indicates what fields are available at the top level of a query operation. */
 export type QueryGetUserByIdArgs = {
-  id?: InputMaybe<Scalars['ID']>;
+  id: Scalars['Int'];
+};
+
+
+/** Indicates what fields are available at the top level of a query operation. */
+export type QueryUnlikedUsersArgs = {
+  userId: Scalars['Int'];
 };
 
 
 /** Indicates what fields are available at the top level of a query operation. */
 export type QueryUserArgs = {
   email?: InputMaybe<Scalars['String']>;
-  id?: InputMaybe<Scalars['ID']>;
+  id?: InputMaybe<Scalars['Int']>;
 };
 
 /** Information about pagination using a simple paginator. */
@@ -162,7 +180,7 @@ export type User = {
   /** When the email was verified. */
   email_verified_at?: Maybe<Scalars['DateTime']>;
   /** Unique primary key. */
-  id: Scalars['ID'];
+  id: Scalars['Int'];
   /** Non-unique name. */
   name: Scalars['String'];
   profile_img_path: Scalars['String'];
@@ -173,13 +191,31 @@ export type User = {
 export type GetLikesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetLikesQuery = { __typename?: 'Query', likes: Array<{ __typename?: 'Like', id?: string | null, is_like?: boolean | null }> };
+export type GetLikesQuery = { __typename?: 'Query', likes: Array<{ __typename?: 'Like', id: number, is_like?: boolean | null }> };
+
+export type LikeMutationVariables = Exact<{
+  from: Scalars['Int'];
+  to: Scalars['Int'];
+  isLike: Scalars['Boolean'];
+}>;
+
+
+export type LikeMutation = { __typename?: 'Mutation', like?: boolean | null };
 
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, name: string, profile_img_path: string }> };
+export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: number, name: string, profile_img_path: string }> };
+
+export type UnlikedUsersQueryVariables = Exact<{
+  userId: Scalars['Int'];
+}>;
+
+
+export type UnlikedUsersQuery = { __typename?: 'Query', unlikedUsers: Array<{ __typename?: 'User', id: number, name: string, profile_img_path: string }> };
 
 
 export const GetLikesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getLikes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"likes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"is_like"}}]}}]}}]} as unknown as DocumentNode<GetLikesQuery, GetLikesQueryVariables>;
+export const LikeDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"like"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"from"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"to"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"isLike"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"like"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"from"},"value":{"kind":"Variable","name":{"kind":"Name","value":"from"}}},{"kind":"Argument","name":{"kind":"Name","value":"to"},"value":{"kind":"Variable","name":{"kind":"Name","value":"to"}}},{"kind":"Argument","name":{"kind":"Name","value":"isLike"},"value":{"kind":"Variable","name":{"kind":"Name","value":"isLike"}}}]}]}}]} as unknown as DocumentNode<LikeMutation, LikeMutationVariables>;
 export const UsersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"profile_img_path"}}]}}]}}]} as unknown as DocumentNode<UsersQuery, UsersQueryVariables>;
+export const UnlikedUsersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"unlikedUsers"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"userId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"unlikedUsers"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"userId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"userId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"profile_img_path"}}]}}]}}]} as unknown as DocumentNode<UnlikedUsersQuery, UnlikedUsersQueryVariables>;

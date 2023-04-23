@@ -4,3 +4,7 @@ query getLikes {
     is_like
   }
 }
+
+mutation like($from: Int!, $to: Int!, $isLike: Boolean!) {
+  like(from: $from, to: $to, isLike: $isLike)
+}
