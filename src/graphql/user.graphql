@@ -1,7 +1,7 @@
-query users($first: Int, $page: Int) {
-  users(first: $first, page: $page) {
-    data {
-      id
-    }
+query users {
+  users {
+    id
+    name
+    profile_img_path
   }
 }

@@ -5,21 +5,26 @@ import Typography from '@mui/material/Typography'
 import React, { useState, useMemo, useRef, RefObject } from 'react'
 import TinderCard from 'react-tinder-card'
 import styled from 'styled-components'
-import { data } from '@/db/mock/data'
+import { User } from '@/graphql/generated'
 
-const db = data
+type Props = {
+  users: User[]
+}
 
-function Index() {
-  const [currentIndex, setCurrentIndex] = useState(db.length - 1)
+function MatchingResultComponents({ users }: Props) {
+  const usersLength = users.length
+  const [currentIndex, setCurrentIndex] = useState(usersLength ? usersLength - 1 : 9)
   const [lastDirection, setLastDirection] = useState('')
   // used for outOfFrame closure
   const currentIndexRef = useRef(currentIndex)
 
+  console.log('currentIndexRef: ', currentIndexRef)
+
   const childRefs: RefObject<any>[] = useMemo(
     () =>
-      Array(db.length)
+      Array(usersLength)
         .fill(0)
-        .map((i) => React.createRef()),
+        .map(() => React.createRef()),
     [],
   )
 
@@ -28,7 +33,7 @@ function Index() {
     currentIndexRef.current = val
   }
 
-  const canGoBack = currentIndex < db.length - 1
+  const canGoBack = currentIndex < usersLength - 1
 
   const canSwipe = currentIndex >= 0
 
@@ -48,7 +53,7 @@ function Index() {
   }
 
   const swipe = async (dir: string) => {
-    if (canSwipe && currentIndex < db.length) {
+    if (canSwipe && currentIndex < usersLength) {
       await childRefs[currentIndex].current.swipe(dir) // Swipe the card!
     }
   }
@@ -67,16 +72,20 @@ function Index() {
       <link href='https://fonts.googleapis.com/css?family=Alatsi&display=swap' rel='stylesheet' />
       <StyledTitle>Maching app</StyledTitle>
       <StyledCardContainer>
-        {db.map((character, index) => (
+        {users.map((character: User, index: number) => (
           <TinderCard
             ref={childRefs[index]}
             className='swipe'
             key={character.name}
-            onSwipe={(dir) => swiped(dir, character.name, index)}
+            onSwipe={(dir) => swiped(dir, character?.name, index)}
             onCardLeftScreen={() => outOfFrame(character.name, index)}
           >
             <Card>
-              <CardMedia component='img' height='300' image={character.url} />
+              <CardMedia
+                component='img'
+                height='300'
+                image={process.env.REACT_APP_FRONT_URL + character.profile_img_path}
+              />
               <CardContent>
                 <Typography gutterBottom variant='h5'>
                   {character.name}
@@ -150,4 +159,4 @@ const StyledButton = styled(Button)`
   margin: 15px !important;
 `
 
-export default Index
+export const MatchingResult = MatchingResultComponents

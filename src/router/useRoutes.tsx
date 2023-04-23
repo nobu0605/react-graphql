@@ -1,7 +1,7 @@
 import { lazy } from 'react'
 import { Suspense } from 'react'
 import { useRoutes as useReactRoutes, Outlet } from 'react-router-dom'
-const Home = lazy(() => import('@/pages/index'))
+const Matching = lazy(() => import('@/pages/matching'))
 
 export const useRoutes = () => {
   const routes = useReactRoutes([
@@ -10,10 +10,10 @@ export const useRoutes = () => {
       element: <Outlet />,
       children: [
         {
-          index: true,
+          path: '/matching',
           element: (
             <Suspense fallback={<div>Loading</div>}>
-              <Home />
+              <Matching />
             </Suspense>
           ),
         },

@@ -1,4 +1,4 @@
-query likes {
+query getLikes {
   likes {
     id
     is_like

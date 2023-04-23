@@ -96,12 +96,12 @@ export type PaginatorInfo = {
 /** Indicates what fields are available at the top level of a query operation. */
 export type Query = {
   __typename?: 'Query';
-  getUserById?: Maybe<User>;
+  getUserById: User;
   likes: Array<Like>;
   /** Find a single user by an identifying attribute. */
   user?: Maybe<User>;
   /** List multiple users. */
-  users?: Maybe<UserPaginator>;
+  users: Array<User>;
 };
 
 
@@ -115,14 +115,6 @@ export type QueryGetUserByIdArgs = {
 export type QueryUserArgs = {
   email?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['ID']>;
-};
-
-
-/** Indicates what fields are available at the top level of a query operation. */
-export type QueryUsersArgs = {
-  first?: InputMaybe<Scalars['Int']>;
-  name?: InputMaybe<Scalars['String']>;
-  page?: InputMaybe<Scalars['Int']>;
 };
 
 /** Information about pagination using a simple paginator. */
@@ -166,39 +158,28 @@ export type User = {
   /** When the account was created. */
   created_at?: Maybe<Scalars['DateTime']>;
   /** Unique email address. */
-  email?: Maybe<Scalars['String']>;
+  email: Scalars['String'];
   /** When the email was verified. */
   email_verified_at?: Maybe<Scalars['DateTime']>;
   /** Unique primary key. */
-  id?: Maybe<Scalars['ID']>;
+  id: Scalars['ID'];
   /** Non-unique name. */
-  name?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+  profile_img_path: Scalars['String'];
   /** When the account was last updated. */
   updated_at?: Maybe<Scalars['DateTime']>;
 };
 
-/** A paginated list of User items. */
-export type UserPaginator = {
-  __typename?: 'UserPaginator';
-  /** A list of User items. */
-  data: Array<User>;
-  /** Pagination information about the list of items. */
-  paginatorInfo: PaginatorInfo;
-};
-
-export type LikesQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetLikesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type LikesQuery = { __typename?: 'Query', likes: Array<{ __typename?: 'Like', id?: string | null, is_like?: boolean | null }> };
+export type GetLikesQuery = { __typename?: 'Query', likes: Array<{ __typename?: 'Like', id?: string | null, is_like?: boolean | null }> };
 
-export type UsersQueryVariables = Exact<{
-  first?: InputMaybe<Scalars['Int']>;
-  page?: InputMaybe<Scalars['Int']>;
-}>;
+export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UsersQuery = { __typename?: 'Query', users?: { __typename?: 'UserPaginator', data: Array<{ __typename?: 'User', id?: string | null }> } | null };
+export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, name: string, profile_img_path: string }> };
 
 
-export const LikesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"likes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"likes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"is_like"}}]}}]}}]} as unknown as DocumentNode<LikesQuery, LikesQueryVariables>;
-export const UsersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"users"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"page"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"page"},"value":{"kind":"Variable","name":{"kind":"Name","value":"page"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"data"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]} as unknown as DocumentNode<UsersQuery, UsersQueryVariables>;
+export const GetLikesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getLikes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"likes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"is_like"}}]}}]}}]} as unknown as DocumentNode<GetLikesQuery, GetLikesQueryVariables>;
+export const UsersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"profile_img_path"}}]}}]}}]} as unknown as DocumentNode<UsersQuery, UsersQueryVariables>;
